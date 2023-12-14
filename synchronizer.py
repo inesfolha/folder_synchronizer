@@ -1,5 +1,5 @@
 import os
-from folder_synchronizer import file_operations
+import file_operations
 from log_config import configure_logger
 
 
@@ -71,7 +71,8 @@ class Synchronizer:
 
     def _remove_extra_files(self):
         """finds all files that exist in the replica folder
-                but not in the source and removes them"""
+            but not in the source and removes them"""
+
         source_files = self._get_source_filenames()
         replica_files = self._get_replica_filenames()
 
@@ -88,9 +89,9 @@ class Synchronizer:
         self.logger.info('Synchronization complete')
 
 
-# Log operations to the log_file
-test = Synchronizer(r'C:\Users\inesf\OneDrive\Ambiente de Trabalho\source_folder',
-                    r'C:\Users\inesf\OneDrive\Ambiente de Trabalho\replica_folder',
-                    "logs/log.log")
 
-test.synchronize_folders()
+#test = Synchronizer(r'C:\Users\inesf\OneDrive\Ambiente de Trabalho\source_folder',
+                   #r'C:\Users\inesf\OneDrive\Ambiente de Trabalho\replica_folder',
+                    #"logs/log.log")
+
+#test.synchronize_folders()
