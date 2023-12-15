@@ -4,37 +4,28 @@ from log_config import configure_logger
 
 
 class Synchronizer:
-    def __init__(self, source_folder_path, replica_folder_path, logger_file):
-        self.logger = configure_logger(logger_file)
+    def __init__(self, source_folder_path, replica_folder_path, log_directory):
+        self.changed = False
+        self.logger = configure_logger(log_directory)
         self.source_folder_path = source_folder_path
         self.replica_folder_path = replica_folder_path
 
-    def _get_source_files(self):
+    def _get_source_filenames(self):
         """returns a set of all the files in the source folder with the full path"""
-        source_files = set()
+        source_file_names = set()
         for root, dirs, files in os.walk(self.source_folder_path):
             for file in files:
-                source_files.add(os.path.join(root, file))
-        return source_files
-
-    def _get_replica_files(self):
-        """returns a set of all the files in the replica folder with the full path"""
-        replica_files = set()
-        for root, dirs, files in os.walk(self.replica_folder_path):
-            for file in files:
-                replica_files.add(os.path.join(root, file))
-        return replica_files
-
-    def _get_source_filenames(self):
-        """returns a set of the filenames in the source folder"""
-        source_files_path = self._get_source_files()
-        source_file_names = {os.path.basename(path) for path in source_files_path}
+                relative_path = os.path.relpath(os.path.join(root, file), self.source_folder_path)
+                source_file_names.add(relative_path)
         return source_file_names
 
     def _get_replica_filenames(self):
-        """returns a set of the filenames in the replica folder"""
-        replica_files_path = self._get_replica_files()
-        replica_file_names = {os.path.basename(path) for path in replica_files_path}
+        """returns a set of all the files in the replica folder with the full path"""
+        replica_file_names = set()
+        for root, dirs, files in os.walk(self.replica_folder_path):
+            for file in files:
+                relative_path = os.path.relpath(os.path.join(root, file), self.replica_folder_path)
+                replica_file_names.add(relative_path)
         return replica_file_names
 
     def _update_common_files(self):
@@ -53,6 +44,7 @@ class Synchronizer:
             if not file_operations.compare_files(source_path, replica_path):
                 file_operations.copy_file(source_path, replica_path)
                 self.logger.info(f'File: {file_name} Successfully updated.')
+                self.changed = True
 
     def _save_missing_files(self):
         """finds all files that exist in the source folder
@@ -68,6 +60,7 @@ class Synchronizer:
             replica_path = os.path.join(self.replica_folder_path, file)
             file_operations.copy_file(source_path, replica_path)
             self.logger.info(f'File: {file} successfully copied to backup.')
+            self.changed = True
 
     def _remove_extra_files(self):
         """finds all files that exist in the replica folder
@@ -79,19 +72,40 @@ class Synchronizer:
         extra_files = replica_files.difference(source_files)
         for file in extra_files:
             replica_path = os.path.join(self.replica_folder_path, file)
-            os.remove(replica_path)
-            self.logger.info(f'File: {file} deleted from backup folder.')
 
-    def synchronize_folders(self):
-        self._update_common_files()
-        self._save_missing_files()
-        self._remove_extra_files()
+            if os.path.isdir(replica_path):
+                os.rmdir(replica_path)
+                self.logger.info(f'Folder: {file} deleted from backup folder.')
+            else:
+                os.remove(replica_path)
+                self.logger.info(f'File: {file} deleted from backup folder.')
+            self.changed = True
+
+    def check_directories(self):
+        """checks all the possible directories inside the source folder and synchronizes them"""
+        source_directories = self._get_source_filenames()
+        replica_directories = self._get_replica_filenames()
+
+        for element in source_directories:
+            if os.path.isdir(element):
+                element_directory = os.path.join(self.replica_folder_path, element)
+
+                if element_directory not in replica_directories:
+                    self._copy_directory(os.path.join(self.source_folder_path, directory), replica_directory)
+                    self.logger.info(f'Directory: {directory} copied to backup folder.')
+
+        self.changed = True
+
+
+def synchronize_folders(self):
+    self.changed = False
+
+    self._update_common_files()
+    self._save_missing_files()
+    self._remove_extra_files()
+    self.check_directories()
+
+    if self.changed:
         self.logger.info('Synchronization complete')
-
-
-
-#test = Synchronizer(r'C:\Users\inesf\OneDrive\Ambiente de Trabalho\source_folder',
-                   #r'C:\Users\inesf\OneDrive\Ambiente de Trabalho\replica_folder',
-                    #"logs/log.log")
-
-#test.synchronize_folders()
+    else:
+        self.logger.info('No changes detected')

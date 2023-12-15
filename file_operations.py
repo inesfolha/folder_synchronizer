@@ -1,10 +1,15 @@
 import os
 import hashlib
+import shutil
 
 
 def copy_file(source_path, replica_path):
-    with open(source_path, 'rb') as source_file, open(replica_path, 'wb') as replica_file:
-        replica_file.write(source_file.read())
+    # Ensure the directory structure for the replica file exists
+    replica_dir = os.path.dirname(replica_path)
+    os.makedirs(replica_dir, exist_ok=True)
+
+    # Use shutil to copy the file
+    shutil.copy2(source_path, replica_path)
 
 
 def compare_files(source_file, replica_file):
