@@ -50,9 +50,9 @@ python main.py --source "C:\path\to\source\folder" --replica "C:\path\to\replica
 ```
 ```bash
 # On Linux or MacOS
-python3 main.py --source "path/to/source/folder" --replica "path/to/replica/folder" --interval 30 --log_folder"logs"
+python3 main.py --source "path/to/source/folder" --replica "path/to/replica/folder" --interval 30 --log_folder "logs"
 ```
-Replace the following placeholders with your specific values:
+Replace the following placeholders with your specific values
 
 - path/to/source/folder: The full path to the source folder you want to synchronize.
 - path/to/replica/folder: The full path to the replica folder where changes will be mirrored.

@@ -8,12 +8,10 @@ import shutil
 class Synchronizer:
     def __init__(self, source_folder_path, replica_folder_path, log_directory):
 
-        if not os.path.exists(source_folder_path) or not os.path.exists(replica_folder_path) or not os.path.exists(
-                log_directory):
+        if not os.path.exists(source_folder_path) or not os.path.exists(log_directory):
             raise FolderNotFoundError(f"Error: One or more of the provided directories do not exist.")
 
-        if not os.path.isdir(source_folder_path) or not os.path.isdir(replica_folder_path) or not os.path.isdir(
-                log_directory):
+        if not os.path.isdir(source_folder_path) or not os.path.isdir(log_directory):
             raise IsADirectoryError(f"Error: {source_folder_path} OR {replica_folder_path} is not a directory.")
 
         self.changed = False
