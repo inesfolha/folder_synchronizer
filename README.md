@@ -1,4 +1,5 @@
 # Synchronizer 📁
+<p id="top"></p>
 
 ## Description
 Synchronizer is a program that synchronizes two folders: source and replica, maintaining an identical copy of source folder at replica folder:
@@ -6,11 +7,13 @@ Synchronizer is a program that synchronizes two folders: source and replica, mai
 - Synchronization works one-way: after the synchronization, the content of the
 replica folder is modified to exactly match content of the source
 folder;
-- Synchronization is performed periodically
+- Synchronization is performed periodically within an interval of seconds set by the user.
 - File creation/copying/removal operations are logged to a file and to the
-console output;
-- Folder paths, synchronization interval and log file path should be provided
+console;
+- Errors are logged to a file and to the console with custom messages.
+- Folder paths, synchronization interval and logs directory should be provided
 using the command line arguments;
+
 
 ------------------------------------------------------------------
 ## How to use
@@ -22,7 +25,7 @@ To run this project you need Python3 installed with the following dependencies:
 
  - argparse
  - logging
- - hashlibgit
+ - hashlib
  - shutil
  - os
  - time
@@ -36,7 +39,7 @@ or
 ```bash
 pip3 install libraryname
 ```
-
+[Back to the Top](#top)
 ### Running the Program
 
 To run the program, open a command line terminal and navigate to the directory containing the `main.py` file. Use the following command format to execute the program:
@@ -58,3 +61,5 @@ Replace the following placeholders with your specific values:
 
 ### Stopping the Program
 To stop the program, press Ctrl + C in the terminal. This will send a keyboard interrupt signal to the program, gracefully stopping its execution.
+
+[Back to the Top](#top)

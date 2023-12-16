@@ -11,7 +11,7 @@ def main():
     source_folder = args.source_folder
     replica_folder = args.replica_folder
     synchronization_interval = args.interval
-    log_folder = args.log_file
+    log_folder = args.log_folder
 
     main_logger = configure_logger(log_folder)
     try:
