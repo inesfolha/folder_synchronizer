@@ -1,7 +1,7 @@
-# Synchronizer
+# Synchronizer 📁
 
 ## Description
-This is a program that synchronizes two folders: source and replica, maintaining an identical copy of source folder at replica folder:
+Synchronizer is a program that synchronizes two folders: source and replica, maintaining an identical copy of source folder at replica folder:
 
 - Synchronization works one-way: after the synchronization, the content of the
 replica folder is modified to exactly match content of the source
@@ -13,3 +13,47 @@ console output;
 using the command line arguments;
 
 ------------------------------------------------------------------
+## How to use
+
+### Dependencies
+
+To run this project you need Python3 installed with the following dependencies: 
+
+ - argparse
+ - logging
+ - hashlib
+ - shutil
+ - os
+ - time
+
+Most of these dependencies are built in Python but if for some reason you don't have any installed, you can simply go to the project directory in the command line and run:
+
+```bash
+pip install libraryname
+```
+or
+```bash
+pip3 install libraryname
+```
+
+### Running the Program
+
+To run the program, open a command line terminal and navigate to the directory containing the `main.py` file. Use the following command format to execute the program:
+
+```bash
+python main.py --source "path/to/source/folder" --replica "path/to/replica/folder" --interval 60 --log_file "logs"
+```
+
+For example, I am using windows so my path would look something like this:
+```bash
+python main.py --source "C:\Users\inesf\source_folder" --replica "C:\Users\inesf\replica_folder" --interval 60 --log_file "logs"
+```
+Replace the following placeholders with your specific values:
+
+- path/to/source/folder: The full path to the source folder you want to synchronize.
+- path/to/replica/folder: The full path to the replica folder where changes will be mirrored.
+- 60: The synchronization interval in seconds. Adjust this value according to your synchronization requirements.
+- logs: The filename or path where log information will be stored. Modify this as needed.
+
+### Stopping the Program
+To stop the program, press Ctrl + C in the terminal. This will send a keyboard interrupt signal to the program, gracefully stopping its execution.
