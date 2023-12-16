@@ -43,12 +43,12 @@ class Synchronizer:
             replica_path = os.path.join(self.replica_folder_path, file_name)
             if not file_operations.compare_files(source_path, replica_path):
                 file_operations.copy_file(source_path, replica_path)
-                self.logger.info(f'File: {file_name} Successfully updated.')
+                self.logger.info(f'File: {file_name} successfully updated.')
                 self.changed = True
 
     def _save_missing_files(self):
-        """finds all files that exist in the source folder
-        but not in the replica and copies them"""
+        """ finds all files that exist in the source folder
+        but not in the replica and copies them """
 
         source_files = self._get_source_filenames()
         replica_files = self._get_replica_filenames()
@@ -72,32 +72,47 @@ class Synchronizer:
         extra_files = replica_files.difference(source_files)
         for file in extra_files:
             replica_path = os.path.join(self.replica_folder_path, file)
-
-            if os.path.isdir(replica_path): # NOT WORKING
-                os.rmdir(replica_path)
-                self.logger.info(f'Folder: {file} deleted from backup folder.')
-            else:
-                os.remove(replica_path)
-                self.logger.info(f'File: {file} deleted from backup folder.')
+            os.remove(replica_path)
+            self.logger.info(f'File: {file} deleted from backup folder.')
             self.changed = True
 
-    def _check_directories(self):  # FIX THIS
-        """checks all the possible directories inside the source folder and synchronizes them"""
-        source_file_names = self._get_source_filenames()
-        replica_file_names = self._get_replica_filenames()
+    def _get_source_directories(self):
+        """returns a set of all the subdirectories inside the source folder with the relative path"""
+        relative_dirs = set()
+        for dirpath, _, _ in os.walk(self.source_folder_path):
+            rel_path = os.path.relpath(dirpath, self.source_folder_path)
+            if rel_path != '.':
+                relative_dirs.add(rel_path)
+        return relative_dirs
 
-        for file in source_file_names:
-            source_path = os.path.join(self.source_folder_path, file)
-            # if we find a folder
-            if os.path.isdir(source_path):
-                # check if the folder already exists in replica
-                if file not in replica_file_names:
-                    os.mkdir(os.path.join(self.replica_folder_path, file))
-                    self.changed = True
+    def _get_replica_directories(self):
+        """returns a set of all the subdirectories inside the replica folder with the relative path"""
+        relative_dirs = set()
+        for dirpath, _, _ in os.walk(self.replica_folder_path):
+            rel_path = os.path.relpath(dirpath, self.replica_folder_path)
+            if rel_path != '.':
+                relative_dirs.add(rel_path)
+        return relative_dirs
 
-                replica_path = os.path.join(self.replica_folder_path, file)
-                sub_synchronizer = Synchronizer(source_path, replica_path, self.logger)
-                sub_synchronizer.synchronize_folders()
+    def _check_directories(self):
+        """copies any missing empty folders to the replica directory
+         and deletes any directories from replica that no longer exist in source"""
+
+        source_dirs = self._get_source_directories()
+        replica_dirs = self._get_replica_directories()
+
+        missing_dirs = source_dirs.difference(replica_dirs)
+        for dir in missing_dirs:
+            os.mkdir(os.path.join(self.replica_folder_path, dir))
+            self.logger.info(f'Directory: {dir} created in backup folder.')
+
+        extra_dirs = replica_dirs.difference(source_dirs)
+        for dir in extra_dirs:
+            os.rmdir(os.path.join(self.replica_folder_path, dir))
+            self.logger.info(f'Directory: {dir} deleted from backup folder.')
+
+        if missing_dirs or extra_dirs:
+            self.changed = True
 
     def synchronize_folders(self):
         self.changed = False
@@ -105,9 +120,11 @@ class Synchronizer:
         self._update_common_files()
         self._save_missing_files()
         self._remove_extra_files()
-        # self._check_directories() NOT WORKING
+        self._check_directories()
 
         if self.changed:
             self.logger.info('Synchronization complete')
         else:
             self.logger.info('No changes detected')
+
+
