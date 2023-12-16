@@ -11,12 +11,12 @@ def main():
     source_folder = args.source_folder
     replica_folder = args.replica_folder
     synchronization_interval = args.interval
-    log_file = args.log_file
+    log_folder = args.log_file
 
-    main_logger = configure_logger(log_file)
+    main_logger = configure_logger(log_folder)
     try:
         # Initialize the Synchronizer object with command line arguments
-        synchronizer = Synchronizer(source_folder, replica_folder, log_file)
+        synchronizer = Synchronizer(source_folder, replica_folder, log_folder)
 
         while True:
             synchronizer.synchronize_folders()

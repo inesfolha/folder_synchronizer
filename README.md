@@ -14,6 +14,7 @@ using the command line arguments;
 
 ------------------------------------------------------------------
 ## How to use
+Start by cloning this project or downloading it as Zip.
 
 ### Dependencies
 
@@ -21,7 +22,7 @@ To run this project you need Python3 installed with the following dependencies:
 
  - argparse
  - logging
- - hashlib
+ - hashlibgit
  - shutil
  - os
  - time
@@ -41,12 +42,12 @@ pip3 install libraryname
 To run the program, open a command line terminal and navigate to the directory containing the `main.py` file. Use the following command format to execute the program:
 
 ```bash
-python main.py --source "path/to/source/folder" --replica "path/to/replica/folder" --interval 60 --log_file "logs"
+# On Windows
+python main.py --source "C:\path\to\source\folder" --replica "C:\path\to\replica\folder" --interval 30 --log_folder "logs"
 ```
-
-For example, I am using windows so my path would look something like this:
 ```bash
-python main.py --source "C:\Users\inesf\source_folder" --replica "C:\Users\inesf\replica_folder" --interval 60 --log_file "logs"
+# On Linux or MacOS
+python3 main.py --source "path/to/source/folder" --replica "path/to/replica/folder" --interval 30 --log_folder"logs"
 ```
 Replace the following placeholders with your specific values:
 
