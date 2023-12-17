@@ -13,7 +13,11 @@ console;
 - Errors are logged to a file and to the console with custom messages.
 - Folder paths, synchronization interval and logs directory should be provided
 using the command line arguments;
-- If the replica folder with the specified path does not exist, one will be created.
+
+
+**Please note:**
+- If the provided path for the replica folder or for the log folder does not exist, one will be created.
+- If the provided path for the source folder is not a valid path for a directory, an error will be raised and logged.
 
 
 ------------------------------------------------------------------

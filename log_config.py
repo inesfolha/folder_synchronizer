@@ -1,8 +1,12 @@
+import os
 import logging
 import datetime as dt
 
 
 def configure_logger(root_path):
+    if not os.path.exists(root_path) or not os.path.isdir(root_path):
+        os.mkdir(root_path)
+
     today = dt.datetime.today()
     filename = f"{today.day:02d} - {today.month:02d} - {today.year}.log"
 
