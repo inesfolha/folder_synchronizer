@@ -61,7 +61,7 @@ Replace the following placeholders with your specific values
 
 - path/to/source/folder: The full path to the source folder you want to synchronize.
 - path/to/replica/folder: The full path to the replica folder where changes will be mirrored.
-- 60: The synchronization interval in seconds. Adjust this value according to your synchronization requirements.
+- 30: The synchronization interval in seconds. Adjust this value according to your synchronization requirements.
 - logs: The directory where log files will be stored. Modify this as needed.
 
 ### Stopping the Program
