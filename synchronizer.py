@@ -9,10 +9,10 @@ class Synchronizer:
     def __init__(self, source_folder_path, replica_folder_path, log_directory):
 
         if not os.path.exists(source_folder_path):
-            raise FolderNotFoundError(f"Error: The provided path for the source folder does not exist")
+            raise InitializationError(f"Error: The provided path for the source folder does not exist")
 
         if not os.path.isdir(source_folder_path):
-            raise IsADirectoryError(f"Error: {source_folder_path} is not a directory.")
+            raise InitializationError(f"Error: {source_folder_path} is not a directory.")
 
         self.changed = False
         self.logger = configure_logger(log_directory)

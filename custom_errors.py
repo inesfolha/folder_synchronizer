@@ -16,3 +16,7 @@ class GetSubdirectoriesError(Exception):
 
 class GetFilenamesError(Exception):
     pass
+
+
+class InitializationError(Exception):
+    pass

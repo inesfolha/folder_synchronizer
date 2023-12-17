@@ -24,10 +24,8 @@ def main():
 
     except KeyboardInterrupt:
         main_logger.info("KeyboardInterrupt. Synchronization Stopped.")
-    except FolderNotFoundError as e:
+    except InitializationError as e:
         main_logger.error(str(e))
-    except IsADirectoryError as ia:
-        main_logger.error(str(ia))
 
 
 if __name__ == "__main__":
